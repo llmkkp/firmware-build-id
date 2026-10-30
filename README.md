@@ -37,6 +37,7 @@
 | [`SPEC.md`](SPEC.md) | 规范主文档（规范性要求、ID 格式、构建记录、存档 profile、一致性等级） |
 | [`schema/build-record.schema.json`](schema/build-record.schema.json) | 构建记录的 JSON Schema |
 | [`examples/record.example.json`](examples/record.example.json) | 构建记录示例 |
+| [`examples/stc8g1k08a/`](examples/stc8g1k08a/) | STC8G1K08A 端到端示例：串口输出 FWID、构建校验、源码存档与取回，含上板实测截图 |
 | [`SKILL.md`](SKILL.md) | Claude Code skill，供 AI agent 按规范接入项目 |
 | [`LICENSE`](LICENSE) | MIT |
 
@@ -82,7 +83,7 @@ FWID:D3M07Q3M9X2KY5
 
 ## 状态与贡献
 
-这是一个想法/规范草案（0.1.0），没有参考实现。欢迎 issue/PR 讨论、补充实现或指出漏洞。
+这是一个想法/规范草案（0.1.0），附带一个 STC8G1K08A 的最小参考示例（已在 Keil C51 9.61 上编译通过，并在 STC8G1K08A-8PIN 上烧录验证）。欢迎 issue/PR 讨论、补充实现或指出漏洞。
 
 采用 MIT License。
 

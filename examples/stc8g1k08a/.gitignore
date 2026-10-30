@@ -1,0 +1,12 @@
+build/
+archive/
+__pycache__/
+*.pyc
+
+# Keil local files (the project uses LIB\STARTUP.A51)
+Objects/
+Listings/
+STARTUP.A51
+*.uvopt
+*.uvgui.*
+*.uvproj.bak
