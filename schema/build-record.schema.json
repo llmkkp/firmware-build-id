@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fwid:schema:build-record:0.1.0",
+  "title": "FWID Build Record",
+  "description": "A build record binding an FWID to its source snapshot and firmware image. See SPEC.md for normative requirements.",
+  "type": "object",
+  "required": [
+    "spec_version",
+    "fwid",
+    "created_at",
+    "project",
+    "target",
+    "source",
+    "build",
+    "image"
+  ],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "pattern": "^0\\.1\\.[0-9]+$",
+      "description": "Version of the FWID specification this record conforms to."
+    },
+    "fwid": {
+      "type": "string",
+      "pattern": "^FWID:[0-9A-HJKMNP-TV-Z]{14,18}$",
+      "description": "Canonical FWID: prefix, uppercase Crockford Base32 body, no hyphens."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Build or archive time in RFC 3339 UTC."
+    },
+    "project": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string" },
+        "repository": { "type": "string" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["mcu"],
+      "properties": {
+        "mcu": { "type": "string", "minLength": 1 },
+        "board": { "type": "string" },
+        "config": { "type": "string" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["snapshot_sha256", "bundle"],
+      "properties": {
+        "vcs": { "type": "string", "enum": ["git", "none", "other"] },
+        "commit": { "type": "string" },
+        "dirty": { "type": "boolean" },
+        "mode": {
+          "type": "string",
+          "enum": ["complete", "referenced"],
+          "description": "complete: all inputs are in the bundle. referenced: external inputs are listed in references."
+        },
+        "snapshot_sha256": { "$ref": "#/$defs/sha256" },
+        "bundle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the snapshot bundle, or an immutable URI."
+        },
+        "included_untracked": { "type": "boolean" },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "version", "uri", "sha256"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "version": { "type": "string", "minLength": 1 },
+              "uri": { "type": "string" },
+              "sha256": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        },
+        "redactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "reason"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "mode": { "const": "referenced" } },
+            "required": ["mode"]
+          },
+          "then": { "required": ["references"] }
+        }
+      ]
+    },
+    "build": {
+      "type": "object",
+      "required": ["command"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "toolchain": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "reproducible": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "image": {
+      "type": "object",
+      "required": ["file", "sha256", "format"],
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "format": { "type": "string", "enum": ["bin", "hex", "elf", "uf2", "other"] },
+        "size": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "sha256"],
+        "properties": {
+          "file": { "type": "string", "minLength": 1 },
+          "sha256": { "$ref": "#/$defs/sha256" },
+          "kind": { "type": "string" }
+        }
+      }
+    },
+    "access": {
+      "type": "object",
+      "properties": {
+        "visibility": { "type": "string", "enum": ["private", "internal", "public"] },
+        "contact": { "type": "string" }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "properties": {
+        "until": { "type": "string", "format": "date" },
+        "policy": { "type": "string" }
+      }
+    },
+    "notes": { "type": "string" },
+    "supersedes": {
+      "type": "string",
+      "pattern": "^FWID:[0-9A-HJKMNP-TV-Z]{14,18}$",
+      "description": "FWID of a superseded record, if this record corrects an earlier one."
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Lowercase hexadecimal SHA-256 digest."
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "spec_version": "0.1.0",
+  "fwid": "FWID:D3M07Q3M9X2KY5",
+  "created_at": "2026-10-31T12:34:56Z",
+  "project": {
+    "name": "demo-blink",
+    "version": "1.4.2",
+    "repository": "https://example.com/demo-blink"
+  },
+  "target": {
+    "mcu": "STM32F103C8T6",
+    "board": "bluepill",
+    "config": "release"
+  },
+  "source": {
+    "vcs": "git",
+    "commit": "3f9a2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b",
+    "dirty": false,
+    "mode": "referenced",
+    "snapshot_sha256": "9f2c4a1b8d3e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcd",
+    "bundle": "source.tar.zst",
+    "included_untracked": false,
+    "references": [
+      {
+        "name": "STM32CubeF1",
+        "version": "1.8.5",
+        "uri": "https://github.com/STMicroelectronics/STM32CubeF1/releases/tag/v1.8.5",
+        "sha256": "0a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcd00"
+      }
+    ]
+  },
+  "build": {
+    "command": "make release",
+    "toolchain": {
+      "name": "arm-none-eabi-gcc",
+      "version": "13.2.1"
+    },
+    "environment": {
+      "TARGET": "bluepill"
+    },
+    "reproducible": false
+  },
+  "image": {
+    "file": "build/demo-blink.bin",
+    "sha256": "1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809",
+    "format": "bin",
+    "size": 27136
+  },
+  "artifacts": [
+    {
+      "file": "build/demo-blink.elf",
+      "sha256": "2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a",
+      "kind": "elf"
+    }
+  ],
+  "access": {
+    "visibility": "private",
+    "contact": "maintainer@example.com"
+  },
+  "retention": {
+    "until": "2036-10-31",
+    "policy": "support-lifetime"
+  },
+  "notes": "Example record. All hashes are placeholders."
+}
